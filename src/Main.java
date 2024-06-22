@@ -61,11 +61,11 @@ public class Main extends Application{
         ta.setMinWidth(250);
         ta.setMinHeight(100);
 
-        Label lblSuccess = new Label("Your password has been saved in file Passwords.txt!");
-        lblSuccess.setVisible(false);
-        lblSuccess.setTextFill(Color.GREEN);
+        Label lblInfo = new Label("Your password has been saved in file Passwords.txt!");
+        lblInfo.setVisible(false);
+        lblInfo.setTextFill(Color.GREEN);
 
-        vb.getChildren().addAll(lblWebsite, tfWebsite, lblLength, tfLength, btnGenerate ,lblRandomPass, ta, lblSuccess);
+        vb.getChildren().addAll(lblWebsite, tfWebsite, lblLength, tfLength, btnGenerate ,lblRandomPass, ta, lblInfo);
 
         root.getChildren().addAll(vb);
 
@@ -74,25 +74,34 @@ public class Main extends Application{
             String length = tfLength.getText().trim();
             tfWebsite.clear();
             tfLength.clear();
+            lblInfo.setVisible(false);
+            ta.clear();
 
             String randomPassword = password(Integer.parseInt(length));
             ta.appendText(randomPassword);
+            ta.appendText("\n");
 
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             LocalDateTime time = LocalDateTime.now();
 
             String savedPassword = new String("Website: " + website + " \nPassword: " + randomPassword + " \nDate: " + dtf.format(time) + "\n\n");
-            try{
-                BufferedWriter writer = new BufferedWriter(new FileWriter("src/Passwords.txt", true));
-                writer.write(savedPassword);
-                System.out.println("Your password has been saved in Passwords.txt!");
-                lblSuccess.setVisible(true);
-                writer.close();
+            if(Integer.parseInt(length) <= 0) {
+                lblInfo.setVisible(true);
+                lblInfo.setText("Please insert correct number for password length!");
+                lblInfo.setTextFill(Color.RED);
+                ta.appendText("\n ERROR - INCORRECT LENGTH FORMAT");
             }
-            catch (IOException ex){
-                System.out.println("Invalid path!");
+            else {
+                try {
+                    BufferedWriter writer = new BufferedWriter(new FileWriter("src/Passwords.txt", true));
+                    writer.write(savedPassword);
+                    System.out.println("Your password has been saved in Passwords.txt!");
+                    lblInfo.setVisible(true);
+                    writer.close();
+                } catch (IOException ex) {
+                    System.out.println("Invalid path!");
+                }
             }
-
         });
 
         Scene scene = new Scene(root, 300, 350);
