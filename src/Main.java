@@ -100,7 +100,15 @@ public class Main extends Application{
             }
         });
 
+
         Scene scene = new Scene(root, 300, 350);
+
+        scene.setOnKeyPressed(event -> {
+            if(event.getCode().toString().equals("ESCAPE")){
+                stage.close();
+            }
+        });
+
         stage.setScene(scene);
         stage.setTitle("Password Generator");
         stage.show();
