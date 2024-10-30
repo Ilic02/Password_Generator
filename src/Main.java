@@ -6,6 +6,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -87,6 +89,10 @@ public class Main extends Application{
         ta.setMinWidth(250);
         ta.setMinHeight(100);
 
+        Button btnCopy = new Button("Copy to Clipboard");
+        btnCopy.setPadding(new Insets(5,5,5,5));
+        btnCopy.setDisable(true);
+
         Label lblInfo = new Label("Your password has been saved in file Passwords.txt!");
         lblInfo.setVisible(false);
         lblInfo.setTextFill(Color.GREEN);
@@ -96,7 +102,7 @@ public class Main extends Application{
         CheckBox cbNumbers = new CheckBox("Include Numbers (0-9)");
         CheckBox cbSpecialChars = new CheckBox("Include Special Characters");
 
-        vb.getChildren().addAll(lblWebsite, tfWebsite, lblLength, tfLength, cbUppercase, cbLowercase, cbNumbers, cbSpecialChars, btnGenerate ,lblRandomPass, ta, lblInfo);
+        vb.getChildren().addAll(lblWebsite, tfWebsite, lblLength, tfLength, cbUppercase, cbLowercase, cbNumbers, cbSpecialChars, btnGenerate ,lblRandomPass, ta, btnCopy, lblInfo);
 
         root.getChildren().addAll(vb);
 
@@ -107,6 +113,7 @@ public class Main extends Application{
             tfLength.clear();
             lblInfo.setVisible(false);
             ta.clear();
+            btnCopy.setDisable(true);
 
             try{
                 int passLength = Integer.parseInt(length);
@@ -134,6 +141,8 @@ public class Main extends Application{
                 String randomPassword = password(passLength, useUpper, useLower, useNumbers, useSpecial);
                 ta.appendText(randomPassword + "\n");
 
+                btnCopy.setDisable(false);
+
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                 LocalDateTime time = LocalDateTime.now();
 
@@ -149,6 +158,20 @@ public class Main extends Application{
                 lblInfo.setTextFill(Color.RED);
             }catch (IOException ex){
                 System.out.println("Invalid path");
+            }
+        });
+
+        btnCopy.setOnAction(e->{
+            String passwordText = ta.getText().trim();
+            if(!passwordText.isEmpty()){
+                Clipboard clipboard = Clipboard.getSystemClipboard();
+                ClipboardContent content = new ClipboardContent();
+                content.putString(passwordText);
+                clipboard.setContent(content);
+
+                lblInfo.setText("Password copied to clipboard!");
+                lblInfo.setTextFill(Color.BLUE);
+                lblInfo.setVisible(true);
             }
         });
 
