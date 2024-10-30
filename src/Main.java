@@ -10,11 +10,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.Random;
 
 public class Main extends Application{
@@ -45,6 +44,19 @@ public class Main extends Application{
         }
 
         return sb.toString();
+    }
+
+    private boolean siteExists(String website){
+        try(BufferedReader reader = new BufferedReader(new FileReader("src/Passwords.txt"))){
+            String line;
+            while((line = reader.readLine()) != null){
+                if(line.contains("Website: " + website))
+                    return true;
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public static void main(String[] args) {
@@ -104,6 +116,21 @@ public class Main extends Application{
                 boolean useNumbers = cbNumbers.isSelected();
                 boolean useSpecial = cbSpecialChars.isSelected();
 
+                if(siteExists(website)){
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Duplicate website");
+                    alert.setHeaderText("Website already exists");
+                    alert.setContentText("Do you want to overwrite the existing password?");
+
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if(result.isPresent() && result.get() == ButtonType.CANCEL){
+                        lblInfo.setText("Password not saved.");
+                        lblInfo.setTextFill(Color.RED);
+                        lblInfo.setVisible(true);
+                        return;
+                    }
+                }
+
                 String randomPassword = password(passLength, useUpper, useLower, useNumbers, useSpecial);
                 ta.appendText(randomPassword + "\n");
 
@@ -111,26 +138,17 @@ public class Main extends Application{
                 LocalDateTime time = LocalDateTime.now();
 
                 String savedPassword = new String("Website: " + website + " \nPassword: " + randomPassword + " \nDate: " + dtf.format(time) + "\n\n");
-                if(Integer.parseInt(length) <= 0) {
+                try(BufferedWriter writer = new BufferedWriter(new FileWriter("src/Passwords.txt", true))){
+                    writer.write(savedPassword);
+                    lblInfo.setText("Your password has been saved in file Passwords.txt!");
+                    lblInfo.setTextFill(Color.GREEN);
                     lblInfo.setVisible(true);
-                    lblInfo.setText("Please insert correct number for password length!");
-                    lblInfo.setTextFill(Color.RED);
-                    ta.appendText("\n ERROR - INCORRECT LENGTH FORMAT");
-                }
-                else {
-                    try {
-                        BufferedWriter writer = new BufferedWriter(new FileWriter("src/Passwords.txt", true));
-                        writer.write(savedPassword);
-                        System.out.println("Your password has been saved in Passwords.txt!");
-                        lblInfo.setVisible(true);
-                        writer.close();
-                    } catch (IOException ex) {
-                        System.out.println("Invalid path!");
-                    }
                 }
             }catch (NumberFormatException ex){
                 lblInfo.setText("Please insert correct number for password length!");
                 lblInfo.setTextFill(Color.RED);
+            }catch (IOException ex){
+                System.out.println("Invalid path");
             }
         });
 
