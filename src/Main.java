@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -17,16 +18,33 @@ import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 public class Main extends Application{
-    protected static String password(int n){
-        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890,./;'{}[]-+*`~";
+    protected static String password(int n, boolean useUpper, boolean useLower, boolean useNumbers, boolean useSpecial) {
+        String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lower = upper.toLowerCase();
+        String numbers = "0123456789";
+        String special = ",./;'{}[]-+*`~";
+
+        String chars = "";
+        if(useUpper)
+            chars += upper;
+        if(useLower)
+            chars += lower;
+        if(useNumbers)
+            chars += numbers;
+        if(useSpecial)
+            chars += special;
+
+        if(chars.isEmpty())
+            return "Please select at least one character set";
+
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
         while(sb.length() < n){
             int index = (int) (random.nextFloat() * chars.length());
             sb.append(chars.charAt(index));
         }
-        String pass = sb.toString();
-        return pass;
+
+        return sb.toString();
     }
 
     public static void main(String[] args) {
@@ -61,7 +79,12 @@ public class Main extends Application{
         lblInfo.setVisible(false);
         lblInfo.setTextFill(Color.GREEN);
 
-        vb.getChildren().addAll(lblWebsite, tfWebsite, lblLength, tfLength, btnGenerate ,lblRandomPass, ta, lblInfo);
+        CheckBox cbUppercase = new CheckBox("Include Uppercase Letters (A-Z)");
+        CheckBox cbLowercase = new CheckBox("Include Lowercase Letters (a-z)");
+        CheckBox cbNumbers = new CheckBox("Include Numbers (0-9)");
+        CheckBox cbSpecialChars = new CheckBox("Include Special Characters");
+
+        vb.getChildren().addAll(lblWebsite, tfWebsite, lblLength, tfLength, cbUppercase, cbLowercase, cbNumbers, cbSpecialChars, btnGenerate ,lblRandomPass, ta, lblInfo);
 
         root.getChildren().addAll(vb);
 
@@ -73,33 +96,43 @@ public class Main extends Application{
             lblInfo.setVisible(false);
             ta.clear();
 
-            String randomPassword = password(Integer.parseInt(length));
-            ta.appendText(randomPassword);
-            ta.appendText("\n");
+            try{
+                int passLength = Integer.parseInt(length);
 
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-            LocalDateTime time = LocalDateTime.now();
+                boolean useUpper = cbUppercase.isSelected();
+                boolean useLower = cbLowercase.isSelected();
+                boolean useNumbers = cbNumbers.isSelected();
+                boolean useSpecial = cbSpecialChars.isSelected();
 
-            String savedPassword = new String("Website: " + website + " \nPassword: " + randomPassword + " \nDate: " + dtf.format(time) + "\n\n");
-            if(Integer.parseInt(length) <= 0) {
-                lblInfo.setVisible(true);
+                String randomPassword = password(passLength, useUpper, useLower, useNumbers, useSpecial);
+                ta.appendText(randomPassword + "\n");
+
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                LocalDateTime time = LocalDateTime.now();
+
+                String savedPassword = new String("Website: " + website + " \nPassword: " + randomPassword + " \nDate: " + dtf.format(time) + "\n\n");
+                if(Integer.parseInt(length) <= 0) {
+                    lblInfo.setVisible(true);
+                    lblInfo.setText("Please insert correct number for password length!");
+                    lblInfo.setTextFill(Color.RED);
+                    ta.appendText("\n ERROR - INCORRECT LENGTH FORMAT");
+                }
+                else {
+                    try {
+                        BufferedWriter writer = new BufferedWriter(new FileWriter("src/Passwords.txt", true));
+                        writer.write(savedPassword);
+                        System.out.println("Your password has been saved in Passwords.txt!");
+                        lblInfo.setVisible(true);
+                        writer.close();
+                    } catch (IOException ex) {
+                        System.out.println("Invalid path!");
+                    }
+                }
+            }catch (NumberFormatException ex){
                 lblInfo.setText("Please insert correct number for password length!");
                 lblInfo.setTextFill(Color.RED);
-                ta.appendText("\n ERROR - INCORRECT LENGTH FORMAT");
-            }
-            else {
-                try {
-                    BufferedWriter writer = new BufferedWriter(new FileWriter("src/Passwords.txt", true));
-                    writer.write(savedPassword);
-                    System.out.println("Your password has been saved in Passwords.txt!");
-                    lblInfo.setVisible(true);
-                    writer.close();
-                } catch (IOException ex) {
-                    System.out.println("Invalid path!");
-                }
             }
         });
-
 
         Scene scene = new Scene(root, 300, 350);
 
