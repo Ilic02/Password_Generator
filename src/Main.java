@@ -202,7 +202,7 @@ public class Main extends Application{
 
         btnToggleTheme.setOnAction(e-> toggleTheme());
 
-        scene = new Scene(root, 300, 350);
+        scene = new Scene(root, 550, 550);
 
         scene.setOnKeyPressed(event -> {
             if(event.getCode().toString().equals("ESCAPE")){
