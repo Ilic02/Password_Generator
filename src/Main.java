@@ -19,6 +19,9 @@ import java.util.Optional;
 import java.util.Random;
 
 public class Main extends Application{
+    private Scene scene;
+    private boolean isDarkMode = false;
+
     protected static String password(int n, boolean useUpper, boolean useLower, boolean useNumbers, boolean useSpecial) {
         String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String lower = upper.toLowerCase();
@@ -59,6 +62,26 @@ public class Main extends Application{
             e.printStackTrace();
         }
         return false;
+    }
+
+    private void toggleTheme(){
+        if(isDarkMode){
+            setLightTheme();
+        }
+        else{
+            setDarkTheme();
+        }
+        isDarkMode = !isDarkMode;
+    }
+
+    private void setLightTheme(){
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add("styles/light-theme.css");
+    }
+
+    private void setDarkTheme(){
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add("styles/dark-theme.css");
     }
 
     public static void main(String[] args) {
@@ -102,7 +125,9 @@ public class Main extends Application{
         CheckBox cbNumbers = new CheckBox("Include Numbers (0-9)");
         CheckBox cbSpecialChars = new CheckBox("Include Special Characters");
 
-        vb.getChildren().addAll(lblWebsite, tfWebsite, lblLength, tfLength, cbUppercase, cbLowercase, cbNumbers, cbSpecialChars, btnGenerate ,lblRandomPass, ta, btnCopy, lblInfo);
+        Button btnToggleTheme = new Button("Toggle Theme");
+
+        vb.getChildren().addAll(lblWebsite, tfWebsite, lblLength, tfLength, cbUppercase, cbLowercase, cbNumbers, cbSpecialChars, btnGenerate ,lblRandomPass, ta, btnCopy, lblInfo, btnToggleTheme);
 
         root.getChildren().addAll(vb);
 
@@ -175,7 +200,9 @@ public class Main extends Application{
             }
         });
 
-        Scene scene = new Scene(root, 300, 350);
+        btnToggleTheme.setOnAction(e-> toggleTheme());
+
+        scene = new Scene(root, 300, 350);
 
         scene.setOnKeyPressed(event -> {
             if(event.getCode().toString().equals("ESCAPE")){

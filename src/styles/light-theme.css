@@ -1,0 +1,9 @@
+.root{
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+}
+
+.label, .check-box{
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+}
