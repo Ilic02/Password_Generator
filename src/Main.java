@@ -140,8 +140,22 @@ public class Main extends Application{
             ta.clear();
             btnCopy.setDisable(true);
 
+            if(website.isEmpty()){
+                lblInfo.setText("Please insert a valid website name!");
+                lblInfo.setTextFill(Color.RED);
+                lblInfo.setVisible(true);
+                return;
+            }
+
             try{
                 int passLength = Integer.parseInt(length);
+
+                if(passLength < 8 || passLength > 24){
+                    lblInfo.setText("Password length must be between 8 and 24 characters!");
+                    lblInfo.setTextFill(Color.RED);
+                    lblInfo.setVisible(true);
+                    return;
+                }
 
                 boolean useUpper = cbUppercase.isSelected();
                 boolean useLower = cbLowercase.isSelected();
