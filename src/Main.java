@@ -84,6 +84,22 @@ public class Main extends Application{
         scene.getStylesheets().add("styles/dark-theme.css");
     }
 
+    private void showInfoAlert(String title, String message){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void showErrorAlert(String title, String message){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -116,7 +132,7 @@ public class Main extends Application{
         btnCopy.setPadding(new Insets(5,5,5,5));
         btnCopy.setDisable(true);
 
-        Label lblInfo = new Label("Your password has been saved in file Passwords.txt!");
+        Label lblInfo = new Label();
         lblInfo.setVisible(false);
         lblInfo.setTextFill(Color.GREEN);
 
@@ -141,9 +157,10 @@ public class Main extends Application{
             btnCopy.setDisable(true);
 
             if(website.isEmpty()){
-                lblInfo.setText("Please insert a valid website name!");
-                lblInfo.setTextFill(Color.RED);
-                lblInfo.setVisible(true);
+//                lblInfo.setText("Please insert a valid website name!");
+//                lblInfo.setTextFill(Color.RED);
+//                lblInfo.setVisible(true);
+                showErrorAlert("Website name error", "Please enter a valid website name.");
                 return;
             }
 
@@ -151,9 +168,10 @@ public class Main extends Application{
                 int passLength = Integer.parseInt(length);
 
                 if(passLength < 8 || passLength > 24){
-                    lblInfo.setText("Password length must be between 8 and 24 characters!");
-                    lblInfo.setTextFill(Color.RED);
-                    lblInfo.setVisible(true);
+//                    lblInfo.setText("Password length must be between 8 and 24 characters!");
+//                    lblInfo.setTextFill(Color.RED);
+//                    lblInfo.setVisible(true);
+                    showErrorAlert("Input Error", "Password length must be between 8 and 24 characters!");
                     return;
                 }
 
@@ -188,9 +206,10 @@ public class Main extends Application{
                 String savedPassword = new String("Website: " + website + " \nPassword: " + randomPassword + " \nDate: " + dtf.format(time) + "\n\n");
                 try(BufferedWriter writer = new BufferedWriter(new FileWriter("src/Passwords.txt", true))){
                     writer.write(savedPassword);
-                    lblInfo.setText("Your password has been saved in file Passwords.txt!");
-                    lblInfo.setTextFill(Color.GREEN);
-                    lblInfo.setVisible(true);
+//                    lblInfo.setText("Your password has been saved in file Passwords.txt!");
+//                    lblInfo.setTextFill(Color.GREEN);
+//                    lblInfo.setVisible(true);
+                    showInfoAlert("Success", "Your password has been saved in file Passwords.txt!");
                 }
             }catch (NumberFormatException ex){
                 lblInfo.setText("Please insert correct number for password length!");
@@ -208,9 +227,10 @@ public class Main extends Application{
                 content.putString(passwordText);
                 clipboard.setContent(content);
 
-                lblInfo.setText("Password copied to clipboard!");
-                lblInfo.setTextFill(Color.BLUE);
-                lblInfo.setVisible(true);
+//                lblInfo.setText("Password copied to clipboard!");
+//                lblInfo.setTextFill(Color.BLUE);
+//                lblInfo.setVisible(true);
+                showInfoAlert("Clipboard", "Password copied to clipboard!");
             }
         });
 
