@@ -1,30 +1,30 @@
 import java.util.Random;
 
 public class PasswordGenerator {
-    public static String generate(int n, boolean useUpper, boolean useLower, boolean useNumbers, boolean useSpecial){
+    public static String generate(int n, boolean useUpper, boolean useLower, boolean useNumbers, boolean useSpecial) {
         String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String lower = upper.toLowerCase();
         String numbers = "0123456789";
         String special = ",./;'{}[]-+*`~";
 
         String chars = "";
-        if(useUpper)
+        if (useUpper)
             chars += upper;
-        if(useLower)
+        if (useLower)
             chars += lower;
-        if(useNumbers)
+        if (useNumbers)
             chars += numbers;
-        if(useSpecial)
+        if (useSpecial)
             chars += special;
 
-        if(chars.isEmpty()){
+        if (chars.isEmpty()) {
             AlertHelper.showErrorAlert("Selection Error", "Please select at least one character set");
             return null;
         }
 
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
-        while(sb.length() < n){
+        while (sb.length() < n) {
             int index = random.nextInt(chars.length());
             sb.append(chars.charAt(index));
         }

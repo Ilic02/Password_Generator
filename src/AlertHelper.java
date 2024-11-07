@@ -1,5 +1,4 @@
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 
 public class AlertHelper {
     public static void showInfoAlert(String title, String message) {

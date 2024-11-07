@@ -8,8 +8,8 @@ public class ThemeManager {
         this.scene = scene;
     }
 
-    public void toggleTheme(){
-        if(isDarkMode)
+    public void toggleTheme() {
+        if (isDarkMode)
             setLightTheme();
         else
             setDarkTheme();
@@ -17,12 +17,12 @@ public class ThemeManager {
         isDarkMode = !isDarkMode;
     }
 
-    private void setLightTheme(){
+    private void setLightTheme() {
         scene.getStylesheets().clear();
         scene.getStylesheets().add("styles/light-theme.css");
     }
 
-    private void setDarkTheme(){
+    private void setDarkTheme() {
         scene.getStylesheets().clear();
         scene.getStylesheets().add("styles/dark-theme.css");
     }
