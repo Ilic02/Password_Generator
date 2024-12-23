@@ -22,7 +22,7 @@ public class FileHandler {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime time = LocalDateTime.now();
 
-        String savedPassword = "Website: " + website + " \nPassword: " + password + " \nDate:" + dtf.format(time) + "\n\n";
+        String savedPassword = "Website: " + website + " \nPassword: " + password + " \nDate: " + dtf.format(time) + "\n\n";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH, true))) {
             writer.write(savedPassword);
         }
