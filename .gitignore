@@ -28,4 +28,4 @@ bin/
 ### Mac OS ###
 .DS_Store
 
-Passwords.txt
+src/Passwords.txt
