@@ -11,21 +11,7 @@ This project is a **Password Generator** built using **JavaFX**. It allows users
 - **Error Handling & User Feedback**: The application provides alerts and feedback messages for better usability.
 
 ### Running the Application
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/Ilic02/Password_Generator.git
-   ```
-2. Navigate to the project directory:
-   ```sh
-   IntelliJ -> Open -> path/to/Password_Generator
-   ```
-3. Run the JavaFX application:
-   ```sh
-    ALT+SHIFT+F10 -> Main -> run
-   ```
-
-If you need help with setting up JavaFX here is the video: https://www.youtube.com/watch?v=Ope4icw6bVk
- 
+Everything is explained in [release](https://github.com/Ilic02/Password_Generator/releases/tag/v1.0.0-password-generator) tab.
 
 ## Project Structure
 ```
