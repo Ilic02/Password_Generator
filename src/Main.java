@@ -60,8 +60,13 @@ public class Main extends Application {
         CheckBox cbSpecialChars = new CheckBox("Include Special Characters");
 
         Button btnToggleTheme = new Button("Toggle Theme");
+        Button btnSearchPasswords = new Button("Search Passwords");
 
-        vb.getChildren().addAll(lblWebsite, tfWebsite, lblLength, tfLength, cbUppercase, cbLowercase, cbNumbers, cbSpecialChars, btnGenerate, lblRandomPass, ta, btnCopy, lblInfo, btnToggleTheme);
+        HBox hbButtons = new HBox(10);
+        hbButtons.setPadding(new Insets(5, 5, 5, 5));
+        hbButtons.getChildren().addAll(btnToggleTheme, btnSearchPasswords);
+
+        vb.getChildren().addAll(lblWebsite, tfWebsite, lblLength, tfLength, cbUppercase, cbLowercase, cbNumbers, cbSpecialChars, btnGenerate, lblRandomPass, ta, btnCopy, lblInfo, hbButtons);
 
         root.getChildren().addAll(vb);
 
@@ -153,6 +158,15 @@ public class Main extends Application {
         });
 
         btnToggleTheme.setOnAction(e -> themeManager.toggleTheme());
+
+        btnSearchPasswords.setOnAction(e -> {
+            try {
+                new PasswordManager().start(new Stage());
+            } catch (Exception ex) {
+                AlertHelper.showErrorAlert("Search Error", "Failed to open Password Manager");
+                ex.printStackTrace();
+            }
+        });
 
         stage.setScene(scene);
         stage.setTitle("Password Generator");
