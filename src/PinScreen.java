@@ -1,8 +1,10 @@
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class PinScreen {
@@ -12,11 +14,12 @@ public class PinScreen {
         pinField.setPromptText("****");
         Button confirmBtn = new Button("Confirm");
         Label message = new Label();
+        message.setTextFill(Color.RED);
 
         confirmBtn.setOnAction(e -> {
             String pin = pinField.getText();
             if (!pin.matches("\\d{4}")) {
-                message.setText("PINmust be exactly 4 digits");
+                message.setText("PIN must be exactly 4 digits");
                 return;
             }
 
@@ -38,8 +41,10 @@ public class PinScreen {
             }
         });
 
-        VBox vb = new VBox(10, label, pinField, confirmBtn, message);
-        vb.setStyle("-fx-padding: 20;");
+        VBox vb = new VBox(50, label, pinField, confirmBtn, message);
+        vb.setPadding(new Insets(10, 10, 10, 10));
+        vb.setMinWidth(250);
+        vb.setMinHeight(150);
         primaryStage.setScene((new Scene(vb)));
         primaryStage.setTitle("PIN Authentication");
         primaryStage.show();
