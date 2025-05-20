@@ -22,8 +22,7 @@ public class Main extends Application {
         launch(args);
     }
 
-    @Override
-    public void start(Stage stage) throws Exception {
+    private void showMainUI(Stage stage) throws IOException {
         HBox root = new HBox(10);
         root.setPadding(new Insets(10, 10, 10, 10));
 
@@ -171,5 +170,17 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.setTitle("Password Generator");
         stage.show();
+        stage.centerOnScreen();
+    }
+
+    @Override
+    public void start(Stage stage) {
+        PinScreen.show(stage, () -> {
+            try {
+                showMainUI(stage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 }
